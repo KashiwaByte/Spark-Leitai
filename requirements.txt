@@ -1,0 +1,4 @@
+gradio==3.44.4
+langchain==0.0.300
+sentence_transformers==2.2.2
+websocket_client==1.6.1
