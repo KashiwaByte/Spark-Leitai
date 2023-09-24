@@ -62,6 +62,7 @@ prompt_4 = ChatPromptTemplate.from_template(template_4)
 prompt_5 = ChatPromptTemplate.from_template(template_5)
 
 
+
 def init_knowledge_vector_store(filepath):
     EMBEDDING_MODEL = "model/text2vec_ernie/"
     embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
@@ -163,24 +164,30 @@ def end_function(text, help):
     help.append((text, response))
     return help, help
 
+class Colors:
+    deep_purple = "#7565C6"
+    light_purple = "#8775DD"
+    red = "#DE868F"
+    grey = "#F3F5F8"
+    white = "#FFFFFF"
 
-title1 = "<h1 style='font-size: 40px;'><center>欢迎体验辩论赛事！</center></h1>"
-content1 = "<h1 style='font-size: 20px;'><center>您可以体验限时的辩论全流程</center></h1>"
-title2 = "<h1 style='font-size: 40px;'><center>欢迎体验经典辩论赛事！</center></h1>"
-content2 = "<h1 style='font-size: 20px;'><center>您可以体验在经典赛题上与可能你了解的大佬们对辩</center></h1>"
-title3 = "<h1 style='font-size: 40px;'><center>欢迎体验自定义材料赛事！</center></h1>"
-content3 = "<h1 style='font-size: 20px;'><center>您可以自行上传某位大佬的辩论记录来体验与他们对辩</center></h1>"
+title1 = f"<h1 style='font-size: 40px;'><center style='color: {Colors.deep_purple};'>AI辩论赛事</center></h1>"
+content1 = f"<h1 style='font-size: 20px;'><center style='color: {Colors.light_purple};'>传统规则, 人机对战一触即发! </center></h1>"
+title2 = f"<h1 style='font-size: 40px;'><center style='color: {Colors.deep_purple};'>AI经典赛事闯关</center></h1>"
+content2 = f"<h1 style='font-size: 20px;'><center style='color: {Colors.light_purple};'>跨越时空, 与大佬同台竞技! </center></h1>"
+title3 = f"<h1 style='font-size: 40px;'><center style='color: {Colors.deep_purple};'>AI关卡定制</center></h1>"
+content3 = f"<h1 style='font-size: 20px;'><center style='color: {Colors.light_purple};'>个性定制, 与AI一决高下! </center></h1>"
 
-with gr.Blocks(css="#chatbot{height:300px} .overflow-y-auto{height:500px}") as Debate_page:
+with gr.Blocks() as Debate_page:
     gr.Markdown(title1)
     gr.Markdown(content1)
     state = gr.State([])
     with gr.Row():
-        chatbot = gr.Chatbot(elem_id="chatbot")
+        chatbot = gr.Chatbot()
         text2 = gr.Textbox()
     with gr.Row():
-        text = gr.Textbox()
-        send = gr.Button("🚀 发送")
+        text = gr.Textbox(scale=19)
+        send = gr.Button("🚀 发送", scale=1)
         send.click(Debate_, [text, state], [chatbot, state])
     with gr.Row():
         init_btn = gr.Button("用户立论")
@@ -197,16 +204,16 @@ with gr.Blocks(css="#chatbot{height:300px} .overflow-y-auto{height:500px}") as D
         free_btn.click(free_function, text, text2)
         end_btn.click(end_function, [text, state], [chatbot, state])
 
-with gr.Blocks(css="#chatbot{height:300px} .overflow-y-auto{height:500px}") as Debate_classic_page:
+with gr.Blocks() as Debate_classic_page:
     gr.Markdown(title2)
     gr.Markdown(content2)
     state = gr.State([])
     with gr.Row():
-        chatbot = gr.Chatbot(elem_id="chatbot")
+        chatbot = gr.Chatbot()
         text2 = gr.Textbox()
     with gr.Row():
-        text = gr.Textbox()
-        send = gr.Button("🚀 发送")
+        text = gr.Textbox(scale=19)
+        send = gr.Button("🚀 发送", scale=1)
         send.click(Debate_classic, [text, state], [chatbot, state])
     with gr.Row():
         init_btn = gr.Button("用户立论")
@@ -223,16 +230,16 @@ with gr.Blocks(css="#chatbot{height:300px} .overflow-y-auto{height:500px}") as D
         free_btn.click(free_function, text, text2)
         end_btn.click(end_function, [text, state], [chatbot, state])
 
-with gr.Blocks(css="#chatbot{height:300px} .overflow-y-auto{height:500px}") as Debate_text_page:
+with gr.Blocks() as Debate_text_page:
     gr.Markdown(title3)
     gr.Markdown(content3)
     state = gr.State([])
     with gr.Row():
-        chatbot = gr.Chatbot(elem_id="chatbot")
+        chatbot = gr.Chatbot()
         text2 = gr.Textbox()
     with gr.Row():
-        text = gr.Textbox()
-        send = gr.Button("🚀 发送")
+        text = gr.Textbox(scale=19)
+        send = gr.Button("🚀 发送", scale=1)
         send.click(Debatebytext_, [text, state], [chatbot, state])
     with gr.Row():
         init_btn = gr.Button("用户立论")
@@ -256,6 +263,47 @@ with gr.Blocks(css="#chatbot{height:300px} .overflow-y-auto{height:500px}") as D
         upload_button.upload(upload_file, upload_button, file_output)
 
 
+
+
+
+
+style_css = f"""
+/* 导航栏 */
+.tab-nav button {{
+    color: {Colors.light_purple} !important;
+}}
+.tab-nav>button.selected {{
+    color: {Colors.deep_purple} !important;
+    font-weight: bold;
+}}
+
+h1 {{
+    color: {Colors.deep_purple} !important;
+}}
+
+/* 按钮 */
+button {{
+    min-width: 70px !important;
+    background: None !important;
+    color: {Colors.deep_purple} !important;
+    white-space: nowrap !important;
+}}
+
+button:hover {{
+    color: {Colors.light_purple} !important;
+}}
+
+div.svelte-1mwvhlq {{
+    color: {Colors.deep_purple} !important;
+}}
+
+span.svelte-1gfkn6j {{
+    color: {Colors.deep_purple} !important;
+}}
+"""
+
+
+
 demo = gr.TabbedInterface([Debate_page, Debate_classic_page, Debate_text_page], [
-                          "辩论赛事",  "经典辩论赛事", "自定义材料赛事"])
+                          "辩论赛事",  "经典辩论赛事", "自定义材料赛事"], css=style_css)
 demo.queue(concurrency_count=3).launch()
