@@ -23,9 +23,29 @@ conversation_1 = ConversationChain(llm=llm)
 memory = ConversationSummaryBufferMemory(llm=llm_tools, max_token_limit=4096)
 conversation_2 = ConversationChain(llm=llm_tools)
 
-template_1 = "现在是正方立论环节，请你听取正方立论，并针对立论进行质询。正方立论内容如下：{text}"
-template_2 = ""
-template_3 = ""
+template_1 = """
+现在是正方立论环节，请你听取正方立论，并针对立论进行质询。正方立论内容如下：{text}
+质询需要逐条反驳观点和论据，并且要给出详细的理由。
+质疑数据论据要用上常用的方法和句式，从数据合理性，样本代表性，统计方法，数据解读等多个角度进行考虑。质疑学理论据要从权威性，解读方式，是否有对抗学理等多个角度进行考虑。
+"""
+template_2 = """
+现在是你的立论环节，你需要在与用户相反的持方上立论，给出自己的观点,
+你立论会遵循以下的立论原则，总共5个原则:
+1.定义明确
+对关键词进行明确且合理的定义,这是展开论证的基础。
+2.标准清晰
+设置公正合理的判断标准,标准要具体明确,为论点比较提供依据。你的回答中必须包含标准。
+3.论点匹配
+论点要能有效支撑并印证标准,与标准和立场高度契合。你的回答中必须包含支撑印证标准的论点。
+4.论据具体
+提供具体可信的论据支撑每个论点,使之更有说服力。你的论点必须要论据支撑。
+5.情境适用
+引入情境和例子,使复杂观点容易被听众接受。你的回答可以适当包含情境
+当用户反驳你时，你需要与他辩驳
+"""
+template_3 = """
+
+"""
 template_4 = ""
 template_5 = ""
 template_6 = ""
@@ -124,6 +144,7 @@ title2 = "<h1 style='font-size: 40px;'><center>欢迎体验经典辩论赛事！
 content2 = "<h1 style='font-size: 20px;'><center>您可以体验在经典赛题上与可能你了解的大佬们对辩</center></h1>"
 title3 = "<h1 style='font-size: 40px;'><center>欢迎体验自定义材料赛事！</center></h1>"
 content3 = "<h1 style='font-size: 20px;'><center>您可以自行上传某位大佬的辩论记录来体验与他们对辩</center></h1>"
+
 with gr.Blocks(css="#chatbot{height:300px} .overflow-y-auto{height:500px}") as Debate_page:
     gr.Markdown(title1)
     gr.Markdown(content1)
@@ -136,17 +157,19 @@ with gr.Blocks(css="#chatbot{height:300px} .overflow-y-auto{height:500px}") as D
         send = gr.Button("🚀 发送")
         send.click(Debate_, [text, state], [chatbot, state])
     with gr.Row():
-        init_btn = gr.Button("立论")
-        ask1_btn = gr.Button("盘问")
-        ask2_btn = gr.Button("质询")
+        init_btn = gr.Button("用户立论")
+        ai_init_btn = gr.Button("AI立论")
+        ask_btn = gr.Button("用户质询")
+        ai_ask_btn = gr.Button("AI质询")
         again_btn = gr.Button("对辩")
         free_btn = gr.Button("自由辩")
         end_btn = gr.Button("结辩")
         init_btn.click(init_function, text, text2)
-        ask1_btn.click(ask1_function, text, text2)
-        ask2_btn.click(ask2_function, text, text2)
+        ask_btn.click(ask1_function, text, text2)
+        ai_ask_btn.click(ask2_function, text, text2)
         again_btn.click(again_function, text, text2)
         free_btn.click(free_function, text, text2)
+        end_btn.click()
 
 with gr.Blocks(css="#chatbot{height:300px} .overflow-y-auto{height:500px}") as Debate_classic_page:
     gr.Markdown(title2)
@@ -160,17 +183,19 @@ with gr.Blocks(css="#chatbot{height:300px} .overflow-y-auto{height:500px}") as D
         send = gr.Button("🚀 发送")
         send.click(Debate_classic, [text, state], [chatbot, state])
     with gr.Row():
-        init_btn = gr.Button("立论")
-        ask1_btn = gr.Button("盘问")
-        ask2_btn = gr.Button("质询")
+        init_btn = gr.Button("用户立论")
+        ai_init_btn = gr.Button("AI立论")
+        ask_btn = gr.Button("用户质询")
+        ai_ask_btn = gr.Button("AI质询")
         again_btn = gr.Button("对辩")
         free_btn = gr.Button("自由辩")
         end_btn = gr.Button("结辩")
         init_btn.click(init_function, text, text2)
-        ask1_btn.click(ask1_function, text, text2)
-        ask2_btn.click(ask2_function, text, text2)
+        ask_btn.click(ask1_function, text, text2)
+        ai_ask_btn.click(ask2_function, text, text2)
         again_btn.click(again_function, text, text2)
         free_btn.click(free_function, text, text2)
+        end_btn.click()
 
 with gr.Blocks(css="#chatbot{height:300px} .overflow-y-auto{height:500px}") as Debate_text_page:
     gr.Markdown(title3)
@@ -184,17 +209,19 @@ with gr.Blocks(css="#chatbot{height:300px} .overflow-y-auto{height:500px}") as D
         send = gr.Button("🚀 发送")
         send.click(Debatebytext_, [text, state], [chatbot, state])
     with gr.Row():
-        init_btn = gr.Button("立论")
-        ask1_btn = gr.Button("盘问")
-        ask2_btn = gr.Button("质询")
+        init_btn = gr.Button("用户立论")
+        ai_init_btn = gr.Button("AI立论")
+        ask_btn = gr.Button("用户质询")
+        ai_ask_btn = gr.Button("AI质询")
         again_btn = gr.Button("对辩")
         free_btn = gr.Button("自由辩")
         end_btn = gr.Button("结辩")
         init_btn.click(init_function, text, text2)
-        ask1_btn.click(ask1_function, text, text2)
-        ask2_btn.click(ask2_function, text, text2)
+        ask_btn.click(ask1_function, text, text2)
+        ai_ask_btn.click(ask2_function, text, text2)
         again_btn.click(again_function, text, text2)
         free_btn.click(free_function, text, text2)
+        end_btn.click()
     with gr.Row():
         file_output = gr.File(label='请上传你想要, 目前支持txt、docx、md格式',
                           file_types=['.txt', '.md', '.docx'])
