@@ -8,6 +8,8 @@ from langchain.prompts import ChatPromptTemplate
 from langchain.document_loaders import TextLoader
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.text_splitter import CharacterTextSplitter
 import sentence_transformers
 import time
 global llm
@@ -64,12 +66,9 @@ prompt_5 = ChatPromptTemplate.from_template(template_5)
 
 
 def init_knowledge_vector_store(filepath):
-    EMBEDDING_MODEL = "model/text2vec_ernie/"
-    embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
-    embeddings.client = sentence_transformers.SentenceTransformer(
-        embeddings.model_name, device='cuda')
-    loader = TextLoader(filepath)
-    docs = loader.load()
+    embeddings = OpenAIEmbeddings()
+    loader = TextLoader(filepath,encoding='utf-8')
+    docs = loader.load_and_split()
     vector_store = FAISS.from_documents(docs, embeddings)
     return vector_store
 
